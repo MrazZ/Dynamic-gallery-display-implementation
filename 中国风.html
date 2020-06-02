@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>China tradition culture</title>
+    <link rel="icon" href="./CNimgs/knot.png" />
+    <style>
+        /* 引入字体 */
+        @font-face
+        {
+            font-family: titleFont;
+            src: url("./CNfonts/书体坊兰亭体.ttf");
+        }
+        @font-face {
+            font-family: ccx;
+            src: url("./CNfonts/长城行楷体.TTF");
+        }
+        @font-face {
+            font-family: yty;
+            src: url("./CNfonts/古典招牌体.ttf");
+        }
+        /* 通用样式 */
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            /* background-image: linear-gradient(-225deg, rgb(232,233,224) 0%, rgba(147,144,206,.6)); */
+            /* 当前背景颜色被canvas覆盖，canvas设置的渐变也是这个颜色，一模一样 */
+            /* canvas存在的情况下设置background会出现重叠的现象，因此注释掉，如果不要canvas，仍想要渐变效果，就把它释放出来 */
+            height: 100%;
+            width: 100%;
+        }
+        .container{
+            /* outline: dashed .5px red; */
+            width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            box-sizing: border-box;
+        }
+        .flex{
+            display: flex;
+            align-items: center;
+        }
+        .hidden{
+            /* visibility: hidden; */
+            /* opacity控制显隐动画效果要比visibility要好 */
+            opacity: 0;
+        }
+
+
+        /* logo区 */
+        .logo,
+        .logo::before,
+        .logo::after{
+            /* outline: dashed .5px blue; */
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+        }
+        .logo{
+            position: relative;
+        }
+        .logo::before{
+            background: url("./CNimgs/logo-before.png") no-repeat center;
+            opacity: .1;
+        }
+        .logo::after{
+            /* 层级最上，依次覆盖：：before，主元素 */
+            background: url("./CNimgs/logo.png") no-repeat center;
+            /* left: 0;q其实它的默认位置就是在0这里，但是如果不声明的话，动画效果就会很突兀 */
+            opacity: 1;
+        }
+        .logo::before,
+        .logo::after{
+            content: "";
+            background-size: contain;
+            position: absolute;/*position就没事，放哪都一样，background-size嫌麻烦可以直接提出来和background放一块*/
+            background-size: contain;/*需要注意的是css中的某些属性是有铺垫关系的，如果没有background，那么这个size放到前面是无效的*/
+            transition-duration: .3s;/* 只对淡入淡出做效果，前后状态一样，所以提取出来了，如果细粒度控制，则需分别写到不同伪元素的不同状态之中 */
+        }
+        /* 动画效果 ,一定是主元素设置，伪元素响应，即:hover::after这个顺序*/
+        .logo:hover::after{
+            opacity: 0;
+            transition-duration: .3s;
+        }
+        .logo:hover::before{
+            opacity: 1;
+            transition-duration: .3s;
+        }
+
+        header{
+            margin-top: 20px;
+        }
+
+        /* 页头文字 */
+        .header-title{
+            /* outline: dashed .5px blue; */
+            display: inline-block;
+            font-family: titleFont;
+            color:  #512D7C;
+            z-index: 6;
+            text-shadow: 1px 1px 5px #CF5052;
+        }
+        .header-title:hover{
+            text-shadow: 1px 1px 3px #EA917A;
+        }
+        .header-title-1{/* 臻 */
+            position: absolute;
+            top: 0;
+            right: 150px;
+            font-size: 40px;
+            line-height: 50px;
+        }
+        .header-title-2{/* 美 */
+            position: absolute;
+            top: 40px;
+            right: 135px;
+            font-size: 40px;
+            line-height: 50px;
+        }
+        
+        .header-title-3{/* 中 */
+            position: absolute;
+            top: 0;
+            right: 70px;
+            font-size: 80px;
+            line-height: 90px;
+        }
+        
+        .header-title-4{/* 华 */
+            position: absolute;
+            top: 45px;
+            right: 25px;
+            font-size: 80px;
+            line-height: 90px;
+        }
+        
+        .header-title-5{/* 英文 magnificent china */
+            position: absolute;
+            top: 5px;
+            left: 60px;
+            font-size: 30px;
+            line-height: 50px;
+            font-family: yty;
+        }
+
+        .china-icon{/* 小红旗 */
+            background: url("./CNimgs/china-icon.png") no-repeat center;
+            background-size: contain;
+            width: 35px;
+            height: 35px;
+            position: absolute;
+            right: 40px;
+            top: 30px;
+        }
+
+
+
+        /* nav区样式 */
+        nav ul{
+            justify-content: flex-start;
+            margin-top: 20px;
+            margin-left: 60px;
+        }
+        nav ul li{
+            /* outline: dashed .5px green; */
+            list-style: none;
+            flex-basis: 200px;
+            font-size: 16px;
+            height: 28px;
+        }
+        nav ul li a{
+            display: inline-block;
+            
+        }
+        .nav-icon{
+            /* outline: dashed .1px darkblue; */
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            margin-right: 6px;
+            vertical-align: middle; /*vertical-align属性 设置在各子元素中，表示其基线相对于父元素的位置，适用于基线不同的子元素互相对齐*/
+        }
+        .nav-icon:hover{
+            width: 28px;
+            height: 28px;
+        }
+        .nav-title{
+            display: inline-block;
+            vertical-align: middle;/*vertical-align一定是设置在子元素中的，放在父元素中是没有用的，其实这里也可以直接用img元素，就不用css引入图片了*/
+            font-family: yty;
+        }
+        .nav-title:hover{
+            text-shadow: .2px .2px .5px #53185D;
+            font-size: 18px;
+            transform: /*修正视差*/
+            translateX(10PX)
+            translateY(1PX);
+        }
+        /* 这个是利用css导入图片，当然可以在html中直接导入 */
+        .nav-ancient-city{
+            background: url("./CNimgs/nav-ancient-city.png") no-repeat center;
+            background-size: contain;
+        }
+        
+
+
+        /* 轮播区 */
+        /* 视口 */
+        .swiperContainer{
+            /* outline: dashed .1px blue; */
+            width: 700px;
+            height: 426px;
+            overflow: hidden;
+            position: relative;
+            margin-left: 60px;
+            margin-top: 20px;
+        }
+        /* 总容器 */
+        #imgList {
+            width: 700%;/*一定要留够空间，轮播图量+首尾两图的复制*/
+            position: absolute;
+            left: 0;
+            top: 0;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            /* transition-timing-function:step-end; */
+            /* transition-duration: 2s; */
+            /*一定要加上transition的至少一个属性，不然添加的transitionend事件不会起作用的,既可以写在css中也可以写在js中，为了方便控制放到了js里*/
+        }
+        /* 单个容器 */
+        #imgList li{
+            /* outline: solid .1px green; */
+            width: 700px;
+            height: 426px;
+            float: left;/* 图片次序从左到右 */
+        }
+        #imgList img{
+            width: 100%;/*设置这两个实现图片平铺，用css设置的话就是contain*/
+            height: 100%;
+            border-radius: 15px 15px 10px 10px;
+        }
+        /* 分页器 */
+        #buttonList{
+            display: flex;
+            flex-direction:column;
+            justify-content: space-around;
+            width: 20px;
+            height: 300px;
+            position: absolute;
+            left: 10px;
+            top: 63px;
+            border-radius: 20px;
+        }
+        #buttonList li{
+            /* outline: dashed .1px green; */
+            list-style: none;
+            overflow: hidden;
+        }
+        #buttonList li:hover{
+            transform: scale(1.3);
+        }
+        #buttonList li:nth-child(1):hover{
+            /* 这里定位#nex图标，他本身由#pre的图标变换而来，
+            在:hover时会恢复原来的样子，所以要加多重变换修正，注意写法 */
+            transform: 
+            scale(1.3)
+            rotate(180deg);
+        }
+        #buttonList .curIndex{
+            background: url("./CNimgs/current.png") no-repeat center;
+        }
+        .buttonList-zi{
+            background: url("./CNimgs/button-icons/rat_zi.png") no-repeat center;
+        }
+        .buttonList-chou{
+            background: url("./CNimgs/button-icons/ox_chou.png") no-repeat center;
+        }
+        .buttonList-yin{
+            background: url("./CNimgs/button-icons/tiger_yin.png") no-repeat center;
+        }
+        .buttonList-mao{
+            background: url("./CNimgs/button-icons/rabbit_mao.png") no-repeat center;
+        }
+        .buttonList-chen{
+            background: url("./CNimgs/button-icons/dragon_chen.png") no-repeat center;
+        }
+        #pre{
+            background: url("./CNimgs/pre.png") no-repeat center;
+        }
+        #nex{
+            background: url("./CNimgs/pre.png") no-repeat center;
+        }
+        #pre,
+        #nex,
+        #buttonList .curIndex,/* 这儿不能直接用.curIndex，应该带全选择器 */
+        .buttonList-12sx{
+            width: 30px;
+            height: 30px;
+            background-size: contain;
+        }
+        #nex{
+            transform: rotate(180deg);
+        }
+
+
+         /*  轮播图右边内容  */
+        .swiper-article{
+            /* outline: auto; */
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 420px;
+            height: 426px;
+            font-family: yty;
+            /* transition-timing-function: step-end; */
+        }
+        .swiper-article-title{
+            /* outline: auto; */
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            font-size: 40px;
+            font-weight: bolder;
+            margin: 20px;
+            line-height: 50px;
+            color: #a61b29;
+            text-shadow: 1px 1px 2px #cc5595;
+            text-align: end;
+        }
+        .swiper-article-summary{
+            /* outline: dashed .1px brown; */
+            margin:30PX 20px 20px 20px;
+            color: #21373d;
+            line-height: 30px;
+            font-size: 20px;
+            text-align:justify;
+            /* text-indent:40px;首行字母缩进 */
+        }
+        .swiper-article-summary a{
+            text-decoration: none;
+        }
+
+
+
+        /* 搜索框，这里是放在了内容区这边，按需调整 */
+        .search-area{/* 搜索框 ，整体定位*/
+            /* outline: dashed .1px red; */
+            position: absolute;
+            bottom: 0;
+            right: 360px;
+            width: 40px;
+            height: 40px;
+            margin-bottom: 30px;
+            z-index: 3;
+        }
+
+        .search-area-container{/* 作为搜索元素的锚点 */
+            position: relative;
+        }
+
+        #mySearch{
+            /* outline: dashed .1px blue; */
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            text-indent: 15px;
+            border: 5px solid #a7535a;
+            background-color: rgba(147,144,206,.1);
+            font-family: yty;
+            font-size: 20px;
+            transition-duration: .5s;
+            transition-timing-function: ease-in;
+        }
+        #mySearch:focus{
+            outline: none;/*这有个小bug，可能是浏览器问题，激活后仍然有outline，所以直接去掉*/
+            height: 40px;
+            width: 150px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            text-indent: 15px;
+            border: 5px solid #1a6840;
+            transition-duration: .3s;
+            transition-timing-function: ease-in;
+        }
+
+        .search-area-container::before{/*放大镜手柄和激活状态的x，这里应该用js给伪元素添加个事件，实现点击清空内容功能*/
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            right: -18px;
+            height: 20px;
+            width: 5px;
+            background-color: #a7535a;
+            transform: rotate(-55deg);
+            transition-duration: .5s;
+            transition-timing-function: ease-in;
+        }
+
+        .search-area-container:focus-within::before{/*注意用focus是不行的，伪元素拉不到，用focus-within可以拉到父元素的焦点状态，*/
+            content: "";
+            position: absolute;
+            bottom: 15px;
+            right: -100px;
+            height: 20px;
+            width: 5px;
+            background-color: #1a6840;
+            transform: rotate(45deg);
+            transition-duration: .3s;
+            transition-timing-function: ease-in;
+        }
+        
+        .search-area-container::after{/* 该有的属性还是提前都要吻合的，不然动画部分内容失效且僵硬 */
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            right: -18px;
+            height: 20px;
+            width: 5px;
+            background-color: #a7535a;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition-duration: .5s;
+            transition-timing-function: ease-in-out;
+        }
+
+        .search-area-container:focus-within::after{
+            content: "";
+            position: absolute;
+            bottom: 15px;
+            right: -100px;
+            height: 20px;
+            width: 5px;
+            background-color: #1a6840;
+            opacity: 1;
+            transform: rotate(-45deg);
+            transition-duration: .35s;
+            /* transition-delay: 0.3s; */
+            transition-timing-function: ease-in-out;
+        }
+
+
+        /* 页足部分，只增加了部分简单的图标 */
+        footer{
+            /* outline: dashed .1px black; */
+            margin-top: 20px;
+        }
+
+        .footer-icons{
+            /* outline: dashed .1px black; */
+            width: 200px;
+            justify-content: space-between;
+            margin-left: 60px;/* 修正位置 */
+        }
+        .wechat{
+            background: url("./CNimgs/service/微信.png") no-repeat center;
+        }
+        .weibo{
+            background: url("./CNimgs/service/微博.png") no-repeat center;
+        }
+        .dingding{
+            background: url("./CNimgs/service/钉钉.png") no-repeat center;
+        }
+        .pengyouquan{
+            background: url("./CNimgs/service/朋友圈.png") no-repeat center;
+        }
+        .qq{
+            background: url("./CNimgs/service/qq.png") no-repeat center;
+        }
+        .github{
+            background: url("./CNimgs/service/github.png") no-repeat center;
+        }
+
+        .footer-icon-item{
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-size: contain;/*bg-size一定要放在background引入图片的后面，不然失效没用*/
+        }
+
+
+
+        /* canvas背景部分，集成实现背景动画和渐变 */
+        #canvas{/* canvas纯粹就是一个背景特效，如果嫌麻烦可以直接从html标签中去掉，css，js都移除即可 */
+            /* background-color: #eee; */
+            z-index: -1;
+            position : absolute;
+            display: block;
+            margin: 0 auto;
+            margin-top: -20px;/*这个是由于设置relative的元素是header，而header设置了margin-top，所以canvas无法覆盖全图*/
+            opacity: .28;
+        }
+        #canvas1{/* 背景渐变 */
+            z-index: -2;
+            position : absolute;
+            display: block;
+            margin: 0 auto;
+            margin-top: -20px;/*这个是由于设置relative的元素是header，而header设置了margin-top，所以canvas无法覆盖全图*/
+        }
+    </style>
+</head>
+<body>
+    <!-- canvas动态背景，不想要可以删掉，不影响页面呈现 -->
+    <canvas id="canvas" style="width:100%;height:100%;"></canvas><!-- 直接在canvas上设置宽高100%，自动铺满整个body -->
+    <canvas id="canvas1" style="width:100%;height:100%;"></canvas><!-- 直接在canvas上设置宽高100%，自动铺满整个body -->
+    <header>
+        <div class="container flex">
+            <div class="logo"><a href="javascript:"></a></div>
+            <div class="header-title-1 header-title">臻</div>
+            <div class="header-title-2 header-title">美</div>
+            <div class="header-title-3 header-title">中</div>
+            <div class="spotlights"></div>
+            <div class="header-title-4 header-title">华</div>
+            <div class="header-title-5 header-title" >Magnificent China</div>
+            <div class="china-icon header-title" ></div>
+        </div>
+    </header>
+
+
+    <nav>
+        <div class="container">
+            <ul class="flex">
+                <li>
+                    <!-- 一个用css引入图片 -->
+                    <a href="#"><div class="nav-ancient-city nav-icon"></div><div class="nav-title">文明纵览</div></a>
+                </li>
+                <li>
+                    <!-- 两种实现导航栏图片加文字效果的方式 -->
+                    <a href="#"><img src="./CNimgs/nav-city.png" class="nav-icon" alt=""><div class="nav-title">当代中国</div></a>
+                </li>
+                <li>
+                    <a href="#"><img src="./CNimgs/nav-sea.png" class="nav-icon" alt=""><div class="nav-title">五湖四海</div></a>
+                </li>
+                <li>
+                    <a href="#"><img src="./CNimgs/nav-mountain.png" class="nav-icon" alt=""><div class="nav-title">名山大川</div></a>
+                </li>
+                <li>
+                    <a href="#"><img src="./CNimgs/nav-culture.png" class="nav-icon" alt=""><div class="nav-title">风土人情</div></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <!-- 轮播图实现 -->
+    <div class="container">
+        <div class="swiperContainer" id="swiperContainer">
+            <!-- swiper区-->
+            <ul id="imgList">
+                <!-- <li><img src="./CNimgs/index/三峡.jpg" alt="三峡"></li> -->
+                <li><img src="./CNimgs/index/故宫.jpg" alt="故宫"></li>
+                <li><img src="./CNimgs/index/长城.jpg" alt="长城"></li>
+                <li><img src="./CNimgs/index/黄河.jpg" alt="黄河"></li>
+                <li><img src="./CNimgs/index/山西.jpg" alt="山西"></li>
+                <li><img src="./CNimgs/index/三峡.jpg" alt="三峡"></li>
+                <!-- <li><img src="./CNimgs/index/故宫.jpg" alt="故宫"></li> -->
+            </ul>
+        </div>
+        <!-- pager分页器 -->
+        <!-- navigation如果独立出来可以放一块
+            <div id="pre"><img src="./CNimgs/pre.png" alt="pre"></div>
+            <div id="nex"><img src="./CNimgs/pre.png" alt="nex"></div> -->
+        <ul id="buttonList">
+            <li class="buttonList-12sx" id="nex"></li>
+            <li class="curIndex buttonList-zi buttonList-12sx"></li>
+            <li class="buttonList-chou buttonList-12sx"></li>
+            <li class="buttonList-yin buttonList-12sx"></li>
+            <li class="buttonList-mao buttonList-12sx"></li>
+            <li class="buttonList-chen buttonList-12sx"></li>
+            <li class="buttonList-12sx" id="pre"></li>
+            
+        </ul>
+
+        
+        <!-- 搜索框放这 -->
+        <div class="search-area">
+            <div class="search-area-container">
+                <input type="text" name="mySearch" id="mySearch" placeholder="">
+            </div>
+        </div>
+
+
+        <!-- 概述区 -->
+        <div class="swiper-article">
+            <div class="swiper-article-summary">
+                紫禁城——明清两朝皇宫历经六百年兴衰荣辱。
+                <br>
+                世界上规模最大、保存最完整的木结构宫殿建筑群。
+                <br>
+                中华民族的骄傲所在，也是全人类的珍贵文化遗产。
+                <br>
+                如今，昔日皇宫禁地那占地112万平方米的重重宫阙，
+                <br>
+                既是收藏明清皇室珍宝的巨大宝库，也是记载明清宫廷历史的鲜活档案<a href="https://www.dpm.org.cn/Home.html">……</a>
+                
+            </div>
+            <div class="swiper-article-title">
+                故宫
+            </div>
+        </div>
+
+        <div class="swiper-article hidden">
+            
+            <div class="swiper-article-summary">
+                高大、坚固而且连绵不断的长垣。
+                <br>
+                它是世界古代史上最伟大的军事防御工程。
+                <br>
+                中华民族的骄傲所在，也是全人类的珍贵文化遗产。
+                <br>
+                促使了中国古代汉族和十几个少数民族进行了广泛的融合。
+                <br>
+                长城对中国人来说，是意志、勇气和力量的标志，象征中华民族的伟大意志和力量<a href="https://baike.baidu.com/item/%E9%95%BF%E5%9F%8E/14251?fromtitle=%E4%B8%87%E9%87%8C%E9%95%BF%E5%9F%8E&fromid=35257&fr=aladdin">……</a>
+                
+            </div>
+            <div class="swiper-article-title">
+                长城
+            </div>
+        </div>
+
+        <div class="swiper-article hidden">
+            
+            <div class="swiper-article-summary">
+                君不见黄河之水天上来，奔流到海不复还。
+                <br>
+                大漠孤烟直，长河落日圆。
+                <br>
+                中华民族的母亲河，她记录了炎黄子孙曾经的苦难，
+                承载华夏儿女的期望，也镌刻世世代代不屈不挠的精神。
+                <br>
+                像一位婀娜多姿的少女，她轻盈的舞步，从西部遥远的白云间，
+                从黛青色的大山中风摆杨柳般逶迤而来，路过高山草甸，在翠绿色的青草中缓缓流淌。
+                <a href="https://baijiahao.baidu.com/s?id=1600481968344486119&wfr=spider&for=pc">……</a>
+                
+            </div>
+            <div class="swiper-article-title">
+                黄河
+            </div>
+        </div>
+
+        <div class="swiper-article hidden">
+            
+            <div class="swiper-article-summary">
+                人说山西好风光，地肥水美五谷香
+                <br>
+                <br>
+                山之西 河之东 人之杰 地之灵
+                <br>
+                <br>
+                周原雅风吹响万古不灭的号专角
+                <br>
+                <br>
+                河图洛书记载生生不息的航迹
+                <br>
+                <br>
+                退避三舍是先贤的智慧顽强
+                <a href="https://baike.baidu.com/item/%E5%B1%B1%E8%A5%BF/188460?fr=aladdin">……</a>
+                
+            </div>
+            <div class="swiper-article-title">
+                山西
+            </div>
+        </div>
+
+        <div class="swiper-article hidden">
+            
+            <div class="swiper-article-summary">
+                巫山凌太清,岧峣类削成.霏霏暮雨合,霭霭朝云生.
+                <br>
+                危峰入鸟道,深谷泻猿声.别有幽栖客,淹留攀桂情.
+                <br>
+                巫山高不极,沓沓状奇新.暗谷疑风雨,幽岩若鬼神.
+                <br>
+                月明三峡曙,潮满二江春.为问阳台夕,应知入梦人.
+                <br>
+                霁云无处所,台馆晓苍苍.电<a href="https://baijiahao.baidu.com/s?id=1600481968344486119&wfr=spider&for=pc">……</a>
+                
+            </div>
+            <div class="swiper-article-title">
+                三峡
+            </div>
+        </div>
+
+    </div>
+
+
+    <footer>
+        <div class="container">
+            <div class="footer-icons flex">
+                <a href="#" class="wechat footer-icon-item"></a>
+                <a href="#" class="weibo footer-icon-item"></a>
+                <a href="#" class="dingding footer-icon-item"></a>
+                <a href="#" class="pengyouquan footer-icon-item"></a>
+                <a href="#" class="github footer-icon-item"></a>
+                <a href="#" class="qq footer-icon-item"></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 轮播区js -->
+    <script src="./CNJS/rotation.js" type="text/javascript"></script>
+    <script src="./CNJS/炫动canvas.js" type="text/javascript"></script><!-- 包含了两个canvas，一个实现动画，一个实现渐变 -->
+</body>
+</html>
